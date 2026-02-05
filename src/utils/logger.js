@@ -1,14 +1,14 @@
 import winston from "winston";
 
-// Definición de niveles de log personalizados
+// Definición de niveles de log personalizados (compatibles con Winston)
 const customLevels = {
     levels: {
-        debug: 0,
-        http: 1,
-        info: 2,
-        warning: 3,
-        error: 4,
-        fatal: 5,
+        fatal: 0,
+        error: 1,
+        warning: 2,
+        info: 3,
+        http: 4,
+        debug: 5,
     },
 };
 
@@ -41,6 +41,5 @@ const prodLogger = winston.createLogger({
         }),
     ],
 });
-
 
 export const logger = process.env.NODE_ENV === "production" ? prodLogger : devLogger;
