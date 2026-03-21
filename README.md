@@ -1,154 +1,206 @@
 Adoptme – Backend API
 
 Proyecto backend desarrollado en Node.js con Express y MongoDB, orientado a la gestión de usuarios, mascotas y adopciones.
-Este repositorio incluye la implementación del módulo de Mocking correspondiente a la Entrega N°1 del trabajo práctico.
 
-Tecnologías utilizadas
 
-Node.js
+=========================
+TECNOLOGÍAS UTILIZADAS
+=========================
 
-Express
+- Node.js
+- Express
+- MongoDB + Mongoose
+- Faker.js
+- Bcrypt
+- Winston (logger)
+- Dotenv
+- Swagger (swagger-jsdoc / swagger-ui-express)
+- Mocha
+- Chai
+- Supertest
+- Sinon
+- Docker
 
-MongoDB + Mongoose
 
-Faker.js
+=========================
+CONFIGURACIÓN INICIAL
+=========================
 
-Bcrypt
-
-Winston (logger)
-
-Dotenv
-
-Configuración inicial
 1. Instalar dependencias
+
 npm install
+
 
 2. Variables de entorno
 
-Crear un archivo .env en la raíz del proyecto con el siguiente contenido:
+Crear un archivo .env en la raíz del proyecto:
 
-MONGO_URL=<URL_DE_CONEXION_MONGODB>
+MONGO_URL=TU_URL_DE_MONGODB
 PORT=8080
 NODE_ENV=development
 
-3. Levantar el servidor
-npm run dev
 
+3. Levantar el servidor
+
+npm run dev
 
 El servidor quedará disponible en:
 
 http://localhost:8080
 
-Rutas principales
+
+=========================
+DOCUMENTACIÓN SWAGGER
+=========================
+
+La documentación interactiva de la API está disponible en:
+
+http://localhost:8080/api/docs
+
+
+=========================
+RUTAS PRINCIPALES
+=========================
+
 Usuarios
 
 GET /api/users
-
 GET /api/users/:uid
+PUT /api/users/:uid
+DELETE /api/users/:uid
+
 
 Mascotas
 
 GET /api/pets
 
+
 Sesiones
 
 GET /api/sessions/current
 
+
 Adopciones
 
 GET /api/adoptions
+GET /api/adoptions/:aid
+POST /api/adoptions/:uid/:pid
 
-Módulo de Mocking (Entrega N°1)
 
-Todas las rutas de mocking se encuentran bajo la ruta base:
+=========================
+TESTS FUNCIONALES
+=========================
+
+Se desarrollaron tests funcionales para todos los endpoints de:
+
+src/routes/adoption.router.js
+
+Cobertura:
+
+- Obtener adopciones
+- Obtener adopción por ID
+- Crear adopción
+- Usuario inexistente
+- Mascota inexistente
+- Mascota ya adoptada
+
+Ejecutar tests:
+
+npm test
+
+
+=========================
+MÓDULO DE MOCKING
+=========================
+
+Base:
 
 /api/mocks
 
+Endpoints:
+
 GET /api/mocks/mockingusers
-
-Genera 50 usuarios mock con el mismo formato que una respuesta de MongoDB.
-
-Características de los usuarios generados:
-
-_id tipo ObjectId
-
-password encriptada con bcrypt (valor original: "coder123")
-
-role aleatorio entre "user" y "admin"
-
-pets como array vacío
-
-Ejemplo:
-curl http://localhost:8080/api/mocks/mockingusers
+Genera 50 usuarios mock
 
 GET /api/mocks/mockingpets
-
-Genera 50 mascotas mock.
-
-Campos:
-
-name
-
-specie (dog o cat)
-
-age
-
-Ejemplo:
-curl http://localhost:8080/api/mocks/mockingpets
+Genera 50 mascotas mock
 
 POST /api/mocks/generateData
 
-Genera e inserta datos mock en la base de datos.
-
-Body (JSON):
+Body:
 {
   "users": 5,
   "pets": 3
 }
 
-Ejemplo:
-curl -X POST http://localhost:8080/api/mocks/generateData \
-  -H "Content-Type: application/json" \
-  -d '{"users":5,"pets":3}'
+Inserta datos en MongoDB
 
-Respuesta esperada:
-{
-  "status": "success",
-  "insertedUsers": 5,
-  "insertedPets": 3
-}
 
-Verificación de inserción
+Verificación:
 
-Luego de ejecutar el endpoint /generateData, se puede comprobar la inserción mediante los endpoints reales:
+GET /api/users
+GET /api/pets
 
-curl http://localhost:8080/api/users
-curl http://localhost:8080/api/pets
 
-Manejo de errores
+=========================
+MANEJO DE ERRORES
+=========================
 
-El proyecto cuenta con un middleware global de manejo de errores y un endpoint de prueba:
-
-GET /api/mocks/error-test
-
-Genera un error controlado para validar el flujo de errores.
-
-Logger
-
-El sistema de logging está implementado con Winston.
-
-En desarrollo:
-
-Loguea desde nivel debug
-
-Salida por consola
-
-En producción:
-
-Loguea desde nivel info
-
-Los logs error y fatal se escriben en errors.log
+Middleware global implementado.
 
 Endpoint de prueba:
 
+GET /api/mocks/error-test
+
+
+=========================
+LOGGER
+=========================
+
+Implementado con Winston
+
+Desarrollo:
+- Nivel debug
+- Salida por consola
+
+Producción:
+- Nivel info
+- Logs error y fatal en archivo
+
+
+Endpoint:
+
 GET /loggerTest
+
+
+=========================
+DOCKER
+=========================
+
+Construir imagen:
+
+docker build -t adoptme-backend .
+
+
+Ejecutar contenedor:
+
+docker run -p 8080:8080 --env-file .env adoptme-backend
+
+
+La aplicación queda disponible en:
+
+http://localhost:8080
+
+Swagger:
+
+http://localhost:8080/api/docs
+
+
+=========================
+DOCKER HUB
+=========================
+
+Imagen publicada en:
+
+https://hub.docker.com/r/sebastianmerlassino/adoptme-backend
+
